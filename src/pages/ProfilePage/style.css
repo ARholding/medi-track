@@ -1,0 +1,127 @@
+.info-patient {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.name,
+.iin,
+.Rh,
+.bloodtype {
+    margin: 0px;
+}
+
+.all-info {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+
+
+}
+
+.blood-info {
+    display: flex;
+    flex-direction: row;
+}
+
+.patient-info {
+    margin-left: 8px;
+    margin-right: 8px;
+    font-size: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    color:#333
+}
+
+.all-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.info-patient h2,
+.blood-info h3 {
+    margin: 0;
+    font-weight: bold;
+    font-size: 20px;
+    color: #333;
+}
+
+
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pressure-block {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: 8px;
+    margin-right: 8px;
+    font-size: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    padding: 20px;
+    font-weight: bold;
+    color:#333
+}
+
+.pressure-value {
+    color: hsl(140, 61%, 27%);
+    font-size: 30px;
+}
+
+.patient-info p {
+    margin: 8px 0;
+}
+
+.allergy-section {
+    border-top: 1px solid #ccc;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-top:20px;
+    margin-left: 8px;
+    margin-right: 8px;
+    font-size: 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    font-weight: bold;
+    color:#333
+}
+
+.allergy-header {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    align-items: center;
+}
+
+.arrow {
+    font-size: 20px;
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.allergy-list ul {
+    list-style: disc;
+    padding-left: 20px;
+}

@@ -1,0 +1,133 @@
+.info-patient{
+    display: flex;
+    flex-direction: column;
+   
+}
+
+.name , .iin, .Rh, .bloodtype{
+    margin: 0px;
+}
+
+.all-info{
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    
+
+}
+
+.blood-info{
+    display: flex;
+    flex-direction: row;
+}
+
+.all-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 8px;
+}
+
+.info-patient h2,
+.blood-info h3 {
+  margin: 0;
+  font-weight: bold;
+  font-size: 20px;
+  color: #333;
+}
+
+.csv-upload {
+  text-align: center;
+  margin-bottom: 20px;
+  
+}
+
+.upload-label {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 24px;
+  background-color: hsl(140, 61%, 27%);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pdf-content {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 8px;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.info{
+  display:flex;
+  flex-direction: column;
+}
+.test-name {
+  font-weight: bold;
+  color: #444;
+  font-size: 18px;
+}
+
+.test-date {
+  font-size: 14px;
+  color: #666;
+}
+
+.value-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.test-value {
+  font-weight: bold;
+  font-size: 18px;
+  color: #333;
+}
+
+.graph-button {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: black;
+}
+
+.chart-window {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin: 8px;
+}
+.chart-wrapper {
+  width: 100%;
+  max-width: 600px;
+  height: 300px;
+  margin: 0 auto;
+}
+
