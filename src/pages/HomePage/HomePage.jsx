@@ -7,10 +7,12 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
+  ResponsiveContainer,
 } from 'recharts';
 import Papa from 'papaparse';
 import './style.css';
+import { useRecords } from "../../contexts/Recordscontext/index";
+
 
 const HomePage = () => {
   const name = localStorage.getItem('name');
@@ -18,8 +20,9 @@ const HomePage = () => {
   const bloodtype = localStorage.getItem('bloodGroup');
   const Rh = localStorage.getItem('rhFactor');
 
-  const [recordsList, setRecordsList] = useState([]);
-  const [expandedChart, setExpandedChart] = useState(null); // теперь одна строка — имя активного графика
+  const { recordsList, setRecordsList } = useRecords();
+
+  const [expandedChart, setExpandedChart] = useState(null);
 
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
@@ -28,7 +31,9 @@ const HomePage = () => {
     Papa.parse(file, {
       complete: (results) => {
         const lines = results.data.filter(
-          (line) => line.length > 1 || /^\d{2}\.\d{2}\.\d{4}$/.test(line[0])
+          (line) =>
+            line.length > 1 ||
+            /^\d{2}\.\d{2}\.\d{4}$/.test(line[0]) // Date format
         );
         let currentDate = '';
         let record = {};
@@ -68,11 +73,17 @@ const HomePage = () => {
   };
 
   const toggleChart = (metric) => {
-    setExpandedChart((prev) => (prev === metric ? null : metric));
+    setExpandedChart((prev) =>
+      prev === metric ? null : metric
+    );
   };
 
   const allMetrics = Array.from(
-    new Set(recordsList.flatMap((record) => Object.keys(record).filter((k) => k !== 'date')))
+    new Set(
+      recordsList.flatMap((record) =>
+        Object.keys(record).filter((k) => k !== 'date')
+      )
+    )
   );
 
   const metricHistory = (metric) =>
@@ -102,38 +113,56 @@ const HomePage = () => {
           <h3 className="Rh">{Rh}</h3>
         </div>
       </div>
-       {/* График сверху */}
+
       {expandedChart && (
-        <div className="chart-window">
-  <h3>График анализа: {expandedChart}</h3>
-  <div className="chart-wrapper">
-    <ResponsiveContainer width="100%" height={300}>
-      <LineChart
-        data={metricHistory(expandedChart)}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
-        <YAxis />
-        <Tooltip
-          formatter={(value) => [value, expandedChart]}
-          labelFormatter={(label) => `Дата: ${label}`}
-        />
-        <Legend />
-        <Line type="monotone" dataKey="value" stroke="#8884d8" activeDot={{ r: 8 }} />
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
-</div>
+        <div className="modal">
+          <div className="modal-content">
+            <h3>График анализа: {expandedChart}</h3>
+
+            <div className="chart-wrapper">
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart
+                    data={metricHistory(expandedChart)}
+                    margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis />
+                    <Tooltip
+                      formatter={(value) => [value, expandedChart]}
+                      labelFormatter={(label) => `Дата: ${label}`}
+                    />
+                    <Legend />
+                    <Line
+                      type="monotone"
+                      dataKey="value"
+                      stroke="#8884d8"
+                      activeDot={{ r: 8 }} 
+                    />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            <ul className="analysis-list">
+              {metricHistory(expandedChart).map((item, idx) => (
+                <li key={idx}>
+                    {expandedChart} {item.value} — {item.date}
+                </li>
+              ))}
+            </ul>
+
+            <button className="close-button" onClick={() => setExpandedChart(null)}>Закрыть</button>
+          </div>
+        </div>
       )}
+
       <div className="csv-upload">
         <label htmlFor="csvInput" className="upload-label">
           Загрузить анализы (CSV)
         </label>
         <input
+          id="csvInput"
           type="file"
           accept=".csv"
-          id="csvInput"
           style={{ display: 'none' }}
           onChange={handleCSVUpload}
         />
@@ -146,16 +175,21 @@ const HomePage = () => {
               .filter(([k]) => k !== 'date')
               .map(([key, value]) => (
                 <div className="result-item" key={key + index}>
-                  <div className="info">
-                    <span className="test-name">{key}</span>
-                    <span className="test-date">Дата: {record.date}</span>
-                  </div>
-                  <div className="value-box">
-                    <span className="test-value">{value}</span>
-                    <button className="graph-button" onClick={() => toggleChart(key)}>
-                      ▶
-                    </button>
-                  </div>
+                    <div className="info">
+                      <span className="test-name">{key}</span>
+                      <span className="test-date">
+                        Дата: {record.date}
+                      </span>
+                    </div>
+                    <div className="value-box">
+                      <span className="test-value">{value}</span>
+                      <button
+                        className="graph-button"
+                        onClick={() => toggleChart(key)}
+                      >
+                        ▶
+                      </button>
+                    </div>
                 </div>
               ))}
           </div>

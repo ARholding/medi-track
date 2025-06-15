@@ -119,9 +119,73 @@
     border-radius: 8px;
     margin: 10px 0;
     cursor: pointer;
+    background: hsl(140, 61%, 27%);
+}
+.upload-label:hover{
+    background: hsl(140, 61%, 18%);
+}
+.allergy-section {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
 }
 
-.allergy-list ul {
-    list-style: disc;
-    padding-left: 20px;
+
+
+.upload-label {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 12px 24px;
+  background: hsl(140, 61%, 27%);
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+
+
+.pressure-input {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: #334155;
+  margin-bottom: 10px;
+  width: 200px;
+  background: #ffffff;
+}
+
+.pressure-button {
+  padding: 10px 20px;
+  background:  hsl(140, 61%, 27%);
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.pressure-button:hover {
+  background: hsl(140, 61%, 27%);
+ 
+}
+
+.pressure-button:active {
+  background: hsl(140, 61%, 18%);
+ 
+}
+
+.pressure-block p {
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 0;
+}
+.space {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
