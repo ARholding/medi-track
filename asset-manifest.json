@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/medi-track/static/css/main.86512d21.css",
+    "main.js": "/medi-track/static/js/main.4383ce93.js",
+    "static/media/profile.svg": "/medi-track/static/media/profile.88602e311ac3a49076cfaede57fc1c56.svg",
+    "static/media/home.svg": "/medi-track/static/media/home.9075ee74594dc8a05d5bb558b247e022.svg",
+    "static/media/logo.svg": "/medi-track/static/media/logo.75fe627f4b00b1c35683a2cc70f20942.svg",
+    "index.html": "/medi-track/index.html",
+    "main.86512d21.css.map": "/medi-track/static/css/main.86512d21.css.map",
+    "main.4383ce93.js.map": "/medi-track/static/js/main.4383ce93.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.86512d21.css",
+    "static/js/main.4383ce93.js"
+  ]
+}
