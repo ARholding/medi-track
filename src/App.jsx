@@ -5,10 +5,14 @@ import HomePage from './pages/HomePage/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import DefaultLayout from './layouts/DefaultLayout';
 import { RecordsProvider } from './contexts/Recordscontext/index';
+import { LanguageProvider } from './contexts/LanguageContext/index';
+import { ThemeProvider } from './contexts/ThemeContext';
 
 function App() {
   return (
-    <RecordsProvider> {/* <- добавляем провайдер */}
+    <LanguageProvider>
+      <ThemeProvider>
+    <RecordsProvider> 
       <Router>
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -31,6 +35,8 @@ function App() {
         </Routes>
       </Router>
     </RecordsProvider>
+    </ThemeProvider>
+    </LanguageProvider>
   );
 }
 

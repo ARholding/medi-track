@@ -5,10 +5,24 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color:  hsl(218deg 50% 91%);;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+body.light {
+  background:hsl(218deg 50% 91%);;
+  color: #000000;
+  --ligh-bg:#ffffff;
+  
+  --text-col:#000;
+}
+
+body.dark {
+  background: hsl(220, 19%, 19%);
+  --ligh-bg:hsl(217, 28%, 74%);
+    color: #000000;
+  --text-col-2:#fff;
+  --text-col:#000;
 }

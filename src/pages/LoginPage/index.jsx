@@ -2,10 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./style.css";
 
+import { useLanguage } from "../../contexts/LanguageContext";
+
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
+  // Используем язык из контекста
+  const { messages, currentLanguage, setCurrentLanguage } = useLanguage();
+
+  const [formData, setFormData] = useState({ 
     name: '',
     age: '',
     weight: '',
@@ -13,21 +18,24 @@ const LoginPage = () => {
     iin: '',
     diabetes: 'нет',
     bloodGroup: '',
-    rhFactor: '',
+    rhFactor: '' 
   });
 
   const fields = [
-    { key: 'name', label: 'Имя пациента' },
-    { key: 'age', label: 'Возраст' },
-    { key: 'weight', label: 'Вес (кг)' },
-    { key: 'height', label: 'Рост (см)' },
-    { key: 'iin', label: 'ИИН' },
-    { key: 'bloodGroup', label: 'Группа крови (A, B, AB, O)' },
-    { key: 'rhFactor', label: 'Резус-фактор (+ или -)' },
+    { key: 'name', label: messages.namePatient },
+    { key: 'age', label: messages.age },
+    { key: 'weight', label: messages.weight },
+    { key: 'height', label: messages.height },
+    { key: 'iin', label: messages.iin },
+    { key: 'bloodGroup', label: messages.bloodGroup },
+    { key: 'rhFactor', label: messages.rhFactor },
   ];
 
   const handleChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    setFormData((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
   };
 
   const handleLogin = () => {
@@ -39,7 +47,26 @@ const LoginPage = () => {
 
   return (
     <div className="container-login">
-      <h2>Авторизация пациента</h2>
+      <h2>{messages.loginPatient}</h2>
+
+      {/* Кнопки выбора языка */}
+      <div className="language-switch">
+        <button 
+          disabled={currentLanguage === "ru"}
+          onClick={() => setCurrentLanguage("ru")}>
+          Русский
+        </button>
+        <button
+          disabled={currentLanguage === "en"}
+          onClick={() => setCurrentLanguage("en")}>
+          English
+        </button>
+        <button
+          disabled={currentLanguage === "kz"}
+          onClick={() => setCurrentLanguage("kz")}>
+          Қазақша
+        </button>
+      </div>
 
       {fields.map(({ key, label }) => (
         <div key={key} className="input-group">
@@ -53,18 +80,18 @@ const LoginPage = () => {
       ))}
 
       <div className="input-group">
-        <label>Инсулинозависимость:</label>
+        <label>{messages.diabetes}:</label>
         <select
           value={formData.diabetes}
           onChange={(e) => handleChange("diabetes", e.target.value)}
         >
-          <option value="да">Да</option>
-          <option value="нет">Нет</option>
+          <option value="да">{messages.yes}</option>
+          <option value="нет">{messages.no}</option>
         </select>
       </div>
 
       <button className="login-button" onClick={handleLogin}>
-        Войти
+        {messages.login}
       </button>
     </div>
   );

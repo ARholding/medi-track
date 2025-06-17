@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import Papa from 'papaparse';
 import './style.css';
+import { useLanguage } from "../../contexts/LanguageContext";
+
 
 const ProfilePage = () => {
+  
   // Данные профиля из LocalStorage
+   const { messages } = useLanguage();
   const name = localStorage.getItem('name') || '';
   const age = localStorage.getItem('age') || '';
   const weight = localStorage.getItem('weight') || '';
@@ -74,132 +78,138 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-      <h1 className="profile-header">Профиль пациента</h1>
+      <h1 className="profile-header">
+  {messages.patientProfile}
+</h1>
 
-      <div className="all-info">
-        <div className="info-patient">
-          <h2 className="name">{name}</h2>
-          <h2 className="iin">{iin}</h2>
-        </div>
-        <div className="blood-info">
-          <h3 className="bloodtype">{bloodGroup}</h3>
-          <h3 className="Rh">{rhFactor}</h3>
-        </div>
+<div className="all-info">
+  <div className="info-patient">
+    <h2 className="name">{name}</h2>
+    <h2 className="iin">{iin}</h2>
+  </div>
+  <div className="blood-info">
+    <h3 className="bloodtype">{bloodGroup}</h3>
+    <h3 className="Rh">{rhFactor}</h3>
+  </div>
+</div>
+
+{/* Давление */}
+<div className="pressure-block">
+  <span className="pressure-label">
+    {messages.pressure}:
+  </span>
+
+  {isEditing ? (
+    <div className="pressure-edit">
+      <div>
+        <input
+          className="pressure-input"
+          type="number"
+          value={systolic}
+          onChange={(e) => setSystolic(e.target.value)}
+          placeholder='верхнее'
+        />
+        <span> / </span>
+        <input
+          className="pressure-input"
+          type="number"
+          value={diastolic}
+          onChange={(e) => setDiastolic(e.target.value)}
+          placeholder='нижнее'
+        />
       </div>
 
-      {/* Давление */}
-      <div className="pressure-block">
-        <span className="pressure-label">Артериальное давление:</span>
-
-        {isEditing ? (
-          <div className="pressure-edit">
-            <div>
-              <input
-                className="pressure-input"
-                type="number"
-                value={systolic}
-                onChange={(e) => setSystolic(e.target.value)}
-                placeholder='верхнее'
-              />
-              <span> / </span>
-              <input
-                className="pressure-input"
-                type="number"
-                value={diastolic}
-                onChange={(e) => setDiastolic(e.target.value)}
-                placeholder='нижнее'
-              />
-            </div>
-
-            <button
-              className="pressure-button"
-              onClick={handleSavePressure}
-            >
-              Сохранить
-            </button>
-          </div>
-        ) : (
-          <div className="pressure-display">
-            <div className='space'>
-              <span className="pressure-value">
-                {systolic} / {diastolic}
-              </span>
-              <button
-                className="pressure-button"
-                onClick={() => setIsEditing(true)}
-              >
-                Изменить
-              </button>
-            </div>
-
-            {pressureLastUpdated && (
-              <p>Последнее изменение: {pressureLastUpdated}</p>
-            )}
-
-          </div>
-        )}
-
-      </div>
-
-      <div className="patient-info">
-        <p><strong>Возраст:</strong> {age}</p>
-        <p><strong>Вес:</strong> {weight} кг</p>
-        <p><strong>Рост:</strong> {height} см</p>
-        <p><strong>Инсулинозависимость:</strong> {diabetes}</p>
-      </div>
-
-      <div className="allergy-section">
-        <div
-          className="allergy-header"
-          onClick={() => setShowAllergy((prev) => !prev)}
+      <button
+        className="pressure-button"
+        onClick={handleSavePressure}
+      >
+        {messages.save}
+      </button>
+    </div>
+  ) : (
+    <div className="pressure-display">
+      <div className='space'>
+        <span className="pressure-value">
+          {systolic} / {diastolic}
+        </span>
+        <button
+          className="pressure-button"
+          onClick={() => setIsEditing(true)}
         >
-          <h2>Аллергии</h2>
-          <span className="arrow">
-            {showAllergy ? '▲' : ' ▼'}
-          </span>
-        </div>
+          {messages.edit}
+        </button>
+      </div>
 
-        {showAllergy && (
-          <div className="allergy-body">
-            <label className="upload-label">
-              Загрузить аллергенный список (CSV)
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleAllergyCSV}
-                style={{ display: 'none' }}
-              />
-            </label>
+      {pressureLastUpdated && (
+        <p>
+          {messages.pressureLastUpdated}: {pressureLastUpdated}
+        </p>
+      )}
 
-            <div className="allergy-list">
-              {allergies.length > 0 ? (
-                allergies.map((item, index) => (
-                    <div key={index} className="result-item">
-                      <div className="info">
-                        <span className="test-name">
-                          {item.name}
-                        </span>
-                        <span className="test-date">
-                          Дата: {item.date}
-                        </span>
-                      </div>
+    </div>
+  )}
 
-                      <div className="value-box">
-                        <span className="test-value">
-                          {item.result}
-                        </span>
-                      </div>
-                    </div>
-                ))
-              ) : (
-                <p>Аллергии не загружены.</p>
-              )}
+</div>
 
-            </div>
-          </div>
+<div className="patient-info">
+  <p><strong>{messages.age}:</strong> {age}</p>
+  <p><strong>{messages.weight}:</strong> {weight} кг</p>
+  <p><strong>{messages.height}:</strong> {height} см</p>
+  <p><strong>{messages.diabetes}:</strong> {diabetes}</p>
+</div>
+
+<div className="allergy-section">
+  <div
+    className="allergy-header"
+    onClick={() => setShowAllergy((prev) => !prev)}
+  >
+    <h2>{messages.allergy}</h2>
+    <span className="arrow">
+      {showAllergy ? '▲' : ' ▼'}
+    </span>
+  </div>
+
+  {showAllergy && (
+    <div className="allergy-body">
+      <label className="upload-label">
+        {messages.uploadAllergy}
+        <input
+          type="file"
+          accept=".csv"
+          onChange={handleAllergyCSV}
+          style={{ display: 'none' }}
+        />
+      </label>
+
+      <div className="allergy-list">
+        {allergies.length > 0 ? (
+          allergies.map((item, index) => (
+              <div key={index} className="result-item">
+                <div className="info">
+                    <span className="test-name">
+                    {item.name}
+                    </span>
+                    <span className="test-date">
+                    Дата: {item.date}
+                    </span>
+                </div>
+
+                <div className="value-box">
+                    <span className="test-value">
+                    {item.result}
+                    </span>
+                </div>
+              </div>
+          ))
+        ) : (
+          <p>{messages.allergyNotUploaded}</p>
         )}
 
       </div>
+    </div>
+  )}
+
+</div>
     </div>
   );
 };

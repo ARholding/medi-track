@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   LineChart,
   Line,
@@ -8,21 +8,29 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
-import Papa from 'papaparse';
-import './style.css';
-import { useRecords } from "../../contexts/Recordscontext/index";
-
+} from "recharts";
+import Papa from "papaparse";
+import "./style.css";
+import { useRecords } from "../../contexts/Recordscontext";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 const HomePage = () => {
-  const name = localStorage.getItem('name');
-  const iin = localStorage.getItem('iin');
-  const bloodtype = localStorage.getItem('bloodGroup');
-  const Rh = localStorage.getItem('rhFactor');
+  const name = localStorage.getItem("name");
+
+  const iin = localStorage.getItem("iin");
+
+  const bloodtype = localStorage.getItem("bloodGroup");
+
+  const Rh = localStorage.getItem("rhFactor");
 
   const { recordsList, setRecordsList } = useRecords();
 
   const [expandedChart, setExpandedChart] = useState(null);
+  const [selectedMetric, setSelectedMetric] = useState('');
+  const [selectedStartDate, setSelectedStartDate] = useState('');
+  const [selectedEndDate, setSelectedEndDate] = useState('');
+  
+  const { messages } = useLanguage();
 
   const handleCSVUpload = (e) => {
     const file = e.target.files[0];
@@ -62,13 +70,13 @@ const HomePage = () => {
           return updatedList
             .filter((r) => r.date)
             .sort((a, b) => {
-              const [d1, m1, y1] = a.date.split('.').map(Number);
-              const [d2, m2, y2] = b.date.split('.').map(Number);
+              const [d1, m1, y1] = a.date.split(".").map(Number);
+              const [d2, m2, y2] = b.date.split(".").map(Number);
               return new Date(y2, m2 - 1, d2) - new Date(y1, m1 - 1, d1);
             });
         });
       },
-      error: (err) => alert('Ошибка при чтении CSV файла: ' + err.message),
+      error: (err) => alert("Ошибка при чтении CSV файла: " + err.message),
     });
   };
 
@@ -81,7 +89,7 @@ const HomePage = () => {
   const allMetrics = Array.from(
     new Set(
       recordsList.flatMap((record) =>
-        Object.keys(record).filter((k) => k !== 'date')
+        Object.keys(record).filter((k) => k !== "date")
       )
     )
   );
@@ -94,14 +102,34 @@ const HomePage = () => {
       }))
       .filter((entry) => entry.value !== null)
       .sort((a, b) => {
-        const [d1, m1, y1] = a.date.split('.').map(Number);
-        const [d2, m2, y2] = b.date.split('.').map(Number);
+        const [d1, m1, y1] = a.date.split(".").map(Number);
+        const [d2, m2, y2] = b.date.split(".").map(Number);
         return new Date(y1, m1 - 1, d1) - new Date(y2, m2 - 1, d2);
       });
 
+  // Фильтрация по периоду и анализу
+  const parsedStart = selectedStartDate ? new Date(selectedStartDate) : null;
+  const parsedEnd = selectedEndDate ? new Date(selectedEndDate) : null;
+
+  const filteredRecords = recordsList.filter((record) => {
+    // фильтрация по периоду
+    const [d, m, y] = record.date.split(".").map(Number);
+    const recordDate = new Date(y, m - 1, d);
+
+    if (parsedStart && recordDate < parsedStart) return false;
+    if (parsedEnd && recordDate > parsedEnd) return false;
+
+    // фильтрация по анализу
+    if (selectedMetric) {
+      return record[selectedMetric] !== undefined;
+    }
+
+    return true;
+  });
+
   return (
     <div className="home-container">
-      <h1 className="profile-header">Главная</h1>
+      <h1 className="profile-header">{messages.homeHeader}</h1>
 
       <div className="all-info">
         <div className="info-patient">
@@ -109,15 +137,15 @@ const HomePage = () => {
           <h2 className="iin">{iin}</h2>
         </div>
         <div className="blood-info">
-          <h3 className="bloodtype">{bloodtype}</h3>
-          <h3 className="Rh">{Rh}</h3>
+          <h3 className="bloodtype"> {bloodtype}</h3>
+          <h3 className="Rh"> {Rh}</h3>
         </div>
       </div>
 
       {expandedChart && (
         <div className="modal">
           <div className="modal-content">
-            <h3>График анализа: {expandedChart}</h3>
+            <h3>{messages.modalwindow} {expandedChart}</h3>
 
             <div className="chart-wrapper">
               <ResponsiveContainer width="100%" height={300}>
@@ -150,35 +178,72 @@ const HomePage = () => {
               ))}
             </ul>
 
-            <button className="close-button" onClick={() => setExpandedChart(null)}>Закрыть</button>
+            <button
+              className="close-button"
+              onClick={() => setExpandedChart(null)}
+            >
+              {messages.close}
+            </button>
           </div>
         </div>
       )}
 
       <div className="csv-upload">
         <label htmlFor="csvInput" className="upload-label">
-          Загрузить анализы (CSV)
+          {messages.upload}
         </label>
         <input
           id="csvInput"
           type="file"
           accept=".csv"
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           onChange={handleCSVUpload}
         />
       </div>
 
+      <div className="filter">
+        <div><h3>{messages.filterHeader}</h3></div>
+        <div className="inputs">
+          <select
+            value={selectedMetric}
+            onChange={(e) => setSelectedMetric(e.target.value)}
+          >
+            <option value="">{messages.allAnalyses}</option>
+            {allMetrics.map((metric, index) => (
+              <option key={index} value={metric}>
+                {metric}
+              </option>
+            ))}
+          </select>
+
+          <input
+            type="date"
+            value={selectedStartDate}
+            onChange={(e) => setSelectedStartDate(e.target.value)}
+          />
+
+          <input
+            type="date"
+            value={selectedEndDate}
+            onChange={(e) => setSelectedEndDate(e.target.value)}
+          />
+
+          <button>{messages.applyFilter}</button>
+        </div>
+      </div>
+
       <div className="results-list">
-        {recordsList.map((record, index) => (
+        {filteredRecords.map((record, index) => (
           <div key={index} className="pdf-content">
             {Object.entries(record)
-              .filter(([k]) => k !== 'date')
+              .filter(([k]) => k !== "date")
+              .filter(([k]) => !selectedMetric || k === selectedMetric)
               .map(([key, value]) => (
                 <div className="result-item" key={key + index}>
                     <div className="info">
                       <span className="test-name">{key}</span>
                       <span className="test-date">
-                        Дата: {record.date}
+                        {messages.date} {record.date}
                       </span>
                     </div>
                     <div className="value-box">
@@ -200,3 +265,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
